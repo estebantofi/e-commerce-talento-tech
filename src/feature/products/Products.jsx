@@ -1,5 +1,40 @@
+import { Container } from "react-bootstrap";
+import Card from "../../components/Card";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 function Products() {
-  return <div>Products</div>;
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("https://fakestoreapi.com/products")
+      .then((response) => {
+        setProducts(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  return (
+    <Container className="mt-5 pt-5 mb-5 row mx-auto justify-content-between">
+      {products.length ? (
+        products.map(({ description, image, title, id }) => (
+          <Card
+            description={description}
+            image={image}
+            title={title}
+            key={id}
+          />
+        ))
+      ) : (
+        <div className="d-flex justify-content-center">
+          <p>without Productos</p>
+        </div>
+      )}
+    </Container>
+  );
 }
 
 export default Products;

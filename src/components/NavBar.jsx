@@ -1,9 +1,16 @@
-import { Nav, Navbar } from "react-bootstrap";
+import { useState } from "react";
+import { Badge, Button, Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import OffCanvas from "./OffCanvas";
 
-function NavBar() {
+export const NavBar = () => {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   return (
-    <Navbar bg="dark" data-bs-theme="dark">
+    <Navbar bg="dark" data-bs-theme="dark" fixed="top">
       <Link className="navbar-brand" to={"/products"}>
         Navbar
       </Link>
@@ -16,12 +23,11 @@ function NavBar() {
         </Link>
       </Nav>
       <Nav>
-        <Link className="nav-link" to={"/cart"}>
-          cart
-        </Link>
+        <Button variant="primary" onClick={handleShow}>
+          Shopping Cart <Badge bg="secondary">9</Badge>
+        </Button>
+        <OffCanvas show={show} handleClose={handleClose} placement={"end"} />
       </Nav>
     </Navbar>
   );
-}
-
-export default NavBar;
+};

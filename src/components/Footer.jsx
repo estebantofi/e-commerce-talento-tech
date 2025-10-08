@@ -1,5 +1,5 @@
 import { Navbar, Container } from "react-bootstrap";
-function Footer() {
+export const Footer = () => {
   return (
     <Navbar bg="dark" data-bs-theme="dark" fixed="bottom">
       <Container>
@@ -7,6 +7,4 @@ function Footer() {
       </Container>
     </Navbar>
   );
-}
-
-export default Footer;
+};
