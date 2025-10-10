@@ -18,7 +18,7 @@ function Products() {
   }, []);
 
   return (
-    <Container className="mt-5 pt-5 mb-5 row mx-auto justify-content-between">
+    <Container className="row mx-auto justify-content-between">
       {products.length ? (
         products.map(({ description, image, title, id }) => (
           <Card
