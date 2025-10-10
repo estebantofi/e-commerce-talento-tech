@@ -1,9 +1,10 @@
 import { NavBar } from "./NavBar";
 import { Footer } from "./Footer";
+import { ShoppingCartProvider } from "../context/ShoppingCartProvider";
 
 function Layout({ children }) {
   return (
-    <>
+    <ShoppingCartProvider>
       <header style={{ height: "55px" }}>
         <NavBar />
       </header>
@@ -20,7 +21,7 @@ function Layout({ children }) {
       <footer>
         <Footer />
       </footer>
-    </>
+    </ShoppingCartProvider>
   );
 }
 

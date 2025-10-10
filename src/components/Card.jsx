@@ -1,8 +1,14 @@
 import { Card as CardBS } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
-function Card({ title, description, image }) {
+function Card({ title, description, image, id }) {
+  const navigate = useNavigate();
+
   return (
-    <CardBS style={{ width: "18rem", marginBottom: "20px" }}>
+    <CardBS
+      style={{ width: "18rem", marginBottom: "20px", cursor: "pointer" }}
+      onClick={() => navigate(`/product/${id}`)}
+    >
       <CardBS.Img
         variant="top"
         src={image}

@@ -26,6 +26,7 @@ function Products() {
             image={image}
             title={title}
             key={id}
+            id={id}
           />
         ))
       ) : (

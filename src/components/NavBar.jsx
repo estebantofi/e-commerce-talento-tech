@@ -2,9 +2,12 @@ import { useState } from "react";
 import { Badge, Button, Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import OffCanvas from "./OffCanvas";
+import { useShoppingCart } from "../context/ShoppingCartContext";
 
 export const NavBar = () => {
   const [show, setShow] = useState(false);
+
+  const { getCountProducts } = useShoppingCart();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -12,7 +15,7 @@ export const NavBar = () => {
   return (
     <Navbar bg="dark" data-bs-theme="dark" fixed="top" className="px-3">
       <Link className="navbar-brand d-flex align-items-center" to={"/products"}>
-        <span class="material-symbols-outlined">home</span> Navbar
+        <span className="material-symbols-outlined">home</span> Navbar
       </Link>
       <Nav className="me-auto">
         <Link className="nav-link" to={"/products"}>
@@ -27,8 +30,8 @@ export const NavBar = () => {
           variant="primary d-flex align-items-center"
           onClick={handleShow}
         >
-          <span class="material-symbols-outlined">shopping_cart</span>
-          <Badge bg="secondary">9</Badge>
+          <span className="material-symbols-outlined">shopping_cart</span>
+          <Badge bg="secondary">{getCountProducts()}</Badge>
         </Button>
         <OffCanvas show={show} handleClose={handleClose} placement={"end"} />
       </Nav>
