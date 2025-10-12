@@ -20,11 +20,12 @@ function Products() {
   return (
     <Container className="row mx-auto justify-content-between">
       {products.length ? (
-        products.map(({ description, image, title, id }) => (
+        products.map(({ description, image, title, id, price }) => (
           <Card
             description={description}
             image={image}
             title={title}
+            price={price}
             key={id}
             id={id}
           />

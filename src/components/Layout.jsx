@@ -1,8 +1,11 @@
+import { Outlet } from "react-router-dom";
+
 import { NavBar } from "./NavBar";
 import { Footer } from "./Footer";
+
 import { ShoppingCartProvider } from "../context/ShoppingCartProvider";
 
-function Layout({ children }) {
+function Layout() {
   return (
     <ShoppingCartProvider>
       <header style={{ height: "55px" }}>
@@ -16,7 +19,7 @@ function Layout({ children }) {
           paddingBottom: "3rem",
         }}
       >
-        {children}
+        <Outlet />
       </main>
       <footer>
         <Footer />
