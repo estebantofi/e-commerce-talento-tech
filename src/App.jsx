@@ -5,11 +5,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import Products from "./feature/products/Products";
 import SuperDeals from "./feature/superdeals/SuperDeals";
-import Cart from "./feature/cart/Cart";
 import Product from "./feature/product/Product";
-import Login from "./feature/login/Login";
+import { Login } from "./feature/login/Login";
+import Buy from "./feature/Buy/Buy";
 
 import Layout from "./components/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -19,9 +20,14 @@ function App() {
         <Route path="/products" element={<Products />}></Route>
         <Route path="/Product/:id" element={<Product />}></Route>
         <Route path="/superdeals" element={<SuperDeals />}></Route>
-        <Route path="/cart" element={<Cart />}></Route>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/buy" element={<Buy />}></Route>
+        </Route>
       </Route>
+      {/* Route without layout */}
       <Route path="/login" element={<Login />}></Route>
+      {/* Default */}
+      <Route path="*" element={<Products />}></Route>
     </Routes>
   );
 }

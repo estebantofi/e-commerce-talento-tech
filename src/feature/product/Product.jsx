@@ -1,13 +1,14 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import { Button } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 import axios from "axios";
 
-import { useShoppingCart } from "../../context/ShoppingCartContext";
+import { useShoppingCart } from "../../context/shoppingCart/ShoppingCartContext";
 
 export default function Product() {
   const [product, setProduct] = useState({});
+  const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
   const { addProductCart, subtractProductCart, products } = useShoppingCart();
@@ -17,11 +18,20 @@ export default function Product() {
       .get(`https://fakestoreapi.com/products/${id}`)
       .then((response) => {
         setProduct(response.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
   }, [id]);
+
+  if (loading) {
+    return (
+      <Container className="d-flex justify-content-center mx-auto">
+        <div>loading..</div>
+      </Container>
+    );
+  }
 
   return (
     <div style={{ width: "80vw", margin: "auto" }}>

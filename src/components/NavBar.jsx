@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Badge, Button, Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import OffCanvas from "./OffCanvas";
-import { useShoppingCart } from "../context/ShoppingCartContext";
+import { useShoppingCart } from "../context/shoppingCart/ShoppingCartContext";
 
 export const NavBar = () => {
   const [show, setShow] = useState(false);
@@ -33,7 +33,12 @@ export const NavBar = () => {
           <span className="material-symbols-outlined">shopping_cart</span>
           <Badge bg="secondary">{getCountProducts()}</Badge>
         </Button>
-        <OffCanvas show={show} handleClose={handleClose} placement={"end"} />
+        <OffCanvas
+          show={show}
+          handleClose={handleClose}
+          placement={"end"}
+          setShow={setShow}
+        />
       </Nav>
     </Navbar>
   );

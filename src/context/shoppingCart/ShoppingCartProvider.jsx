@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { ShoppingCartContext } from "./ShoppingCartContext";
 
-import { ProductsControl } from "../utils/ProductsControl";
+import { addProduct, substractProduct } from "../../utils/ProductsControl";
 
 export const ShoppingCartProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
@@ -11,10 +11,10 @@ export const ShoppingCartProvider = ({ children }) => {
     products.reduce((acc, product) => acc + product.quantity, 0);
 
   const addProductCart = (product) =>
-    setProducts(ProductsControl(products, product, "plus"));
+    setProducts(addProduct(products, product));
 
   const subtractProductCart = (product) =>
-    setProducts(ProductsControl(products, product, "minus"));
+    setProducts(substractProduct(products, product));
 
   const deleteProductCart = () => {
     setProducts([]);
