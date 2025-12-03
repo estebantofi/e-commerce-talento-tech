@@ -4,7 +4,6 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import Products from "./feature/products/Products";
-import SuperDeals from "./feature/superdeals/SuperDeals";
 import Product from "./feature/product/Product";
 import { Login } from "./feature/login/Login";
 import Buy from "./feature/Buy/Buy";
@@ -19,7 +18,6 @@ function App() {
         <Route index element={<Products />}></Route>
         <Route path="/products" element={<Products />}></Route>
         <Route path="/Product/:id" element={<Product />}></Route>
-        <Route path="/superdeals" element={<SuperDeals />}></Route>
         <Route element={<ProtectedRoute />}>
           <Route path="/buy" element={<Buy />}></Route>
         </Route>
