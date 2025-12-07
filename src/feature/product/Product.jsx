@@ -5,25 +5,42 @@ import { Button, Container } from "react-bootstrap";
 import axios from "axios";
 
 import { useShoppingCart } from "../../context/shoppingCart/ShoppingCartContext";
+import { useAuth } from "../../context/auth/AuthContext";
 
 export default function Product() {
   const [product, setProduct] = useState({});
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
   const { id } = useParams();
 
   const { addProductCart, subtractProductCart, products } = useShoppingCart();
+  const { auth } = useAuth();
 
   useEffect(() => {
     axios
-      .get(`https://fakestoreapi.com/products/${id}`)
+      .get(`https://691cfd93d58e64bf0d34a237.mockapi.io/products/`, {
+        params: { id },
+      })
       .then((response) => {
-        setProduct(response.data);
+        const data = response.data.filter((d) => d.id === id);
+
+        setProduct(data[0]);
         setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        setError(true);
       });
   }, [id]);
+
+  if (error) {
+    return (
+      <Container className="d-flex justify-content-center mx-auto">
+        <div>Product is not available...</div>
+      </Container>
+    );
+  }
 
   if (loading) {
     return (
@@ -33,6 +50,18 @@ export default function Product() {
     );
   }
 
+  const handleSubtractProduct = () => {
+    if (auth) {
+      subtractProductCart(product);
+    }
+  };
+
+  const handleAddProduct = () => {
+    if (auth) {
+      addProductCart(product);
+    }
+  };
+
   return (
     <div style={{ width: "80vw", margin: "auto" }}>
       <div className="d-flex">
@@ -41,19 +70,20 @@ export default function Product() {
           <div className="d-flex align-item-center">
             <Button
               variant="danger d-flex align-items-center"
-              onClick={() => subtractProductCart(product)}
+              title={auth ? "" : "Login firts"}
+              onClick={handleSubtractProduct}
             >
               <span className="material-symbols-outlined">
                 remove_shopping_cart
               </span>
             </Button>
             <p className="mx-3 my-auto text-center">
-              {products?.find((product) => String(product.id) === id)
-                ?.quantity || 0}
+              {products?.find((product) => product.id === id)?.quantity || 0}
             </p>
             <Button
               variant="primary d-flex align-items-center"
-              onClick={() => addProductCart(product)}
+              title={auth ? "" : "Login firts"}
+              onClick={handleAddProduct}
             >
               <span className="material-symbols-outlined">
                 add_shopping_cart

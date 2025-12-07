@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const addProduct = (actualProducts, product) => {
   if (actualProducts.length === 0) {
     return [{ ...product, quantity: 1 }];
@@ -42,4 +44,12 @@ export const substractProduct = (actualProducts, product) => {
   } else {
     return [...actualProducts];
   }
+};
+
+export const putProducts = (products, cartId) => {
+  const url = `https://691cfd93d58e64bf0d34a237.mockapi.io/carts/${cartId}`;
+
+  return axios.put(url, {
+    products,
+  });
 };

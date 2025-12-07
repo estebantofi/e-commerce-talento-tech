@@ -9,7 +9,7 @@ function Products() {
 
   useEffect(() => {
     axios
-      .get("https://fakestoreapi.com/products")
+      .get("https://691cfd93d58e64bf0d34a237.mockapi.io/products")
       .then((response) => {
         setProducts(response.data);
         setLoading(false);

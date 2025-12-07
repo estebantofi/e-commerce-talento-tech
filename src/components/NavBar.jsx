@@ -6,11 +6,13 @@ import { useShoppingCart } from "../context/shoppingCart/ShoppingCartContext";
 import { useAuth } from "../context/auth/AuthContext";
 
 import { decodeToken } from "react-jwt";
+import axios from "axios";
 
 export const NavBar = () => {
   const [show, setShow] = useState(false);
 
-  const { getCountProducts, cleanShoppingCart } = useShoppingCart();
+  const { getCountProducts, setProducts, setCartId, cartId } =
+    useShoppingCart();
   const { auth, clearToken } = useAuth();
 
   const navigate = useNavigate();
@@ -19,17 +21,68 @@ export const NavBar = () => {
 
   if (auth) {
     const token = localStorage.getItem("token");
+
     if (token) {
-      const { sub, user } = decodeToken(token);
+      const { sub: userId, user } = decodeToken(token);
       userName = { user };
+
+      const existProducts = getCountProducts();
+
+      if (!existProducts && cartId === null) {
+        const url = "https://691cfd93d58e64bf0d34a237.mockapi.io/carts";
+
+        axios
+          .get(url, {
+            params: {
+              userId,
+              completed: false,
+            },
+            headers: {
+              "content-type": "application/json",
+            },
+          })
+          .then((cart) => {
+            const cardId = cart.data[0].id;
+
+            const personCart = cart.data.flatMap((d) => {
+              const { products } = d;
+
+              if (products?.length) {
+                return products;
+              } else {
+                return [];
+              }
+            });
+
+            setCartId(cardId);
+            setProducts(personCart);
+          })
+          .catch(() => {
+            axios
+              .post(url, {
+                userId,
+                completed: false,
+                products: [],
+              })
+              .then((resp) => {
+                const cardId = resp.data.id;
+
+                setCartId(cardId);
+                setProducts([]);
+              });
+          });
+      }
     }
   }
 
   const handleLogout = () => {
     clearToken();
-    cleanShoppingCart();
+    setCartId(null);
+    setProducts([]);
+
     userName = {};
   };
+
   const handleLogin = () => {
     navigate("/login");
   };

@@ -21,7 +21,19 @@ function OffCanvas({ show, handleClose, placement }) {
 
       <Offcanvas.Body>
         {products.length === 0 ? (
-          <p>Your shopping cart is empty</p>
+          <>
+            <p>Your shopping cart is empty</p>
+            <Button
+              className="col-auto"
+              variant="primary d-flex align-items-center"
+              onClick={() => {
+                navigate("/");
+                handleClose();
+              }}
+            >
+              <span>Show Products</span>
+            </Button>
+          </>
         ) : (
           <>
             <div
@@ -31,12 +43,12 @@ function OffCanvas({ show, handleClose, placement }) {
               }}
             >
               <Table striped hover>
-                <thead>
+                <thead style={{ position: "sticky", top: "0" }}>
                   <tr>
                     <th>Product</th>
                     <th>Quantity</th>
                     <th>Price</th>
-                    <th>Total</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -49,16 +61,25 @@ function OffCanvas({ show, handleClose, placement }) {
                     </tr>
                   ))}
                 </tbody>
+                <tfoot style={{ position: "sticky", bottom: "0" }}>
+                  <tr>
+                    <td colSpan="2"></td>
+                    <td>Total</td>
+                    <td>
+                      {products.reduce(
+                        (acc, actual) => acc + actual.price * actual.quantity,
+                        0
+                      )}
+                    </td>
+                  </tr>
+                </tfoot>
               </Table>
             </div>
             <div className="mt-3 row justify-content-evenly">
               <Button
                 className="col-auto"
                 variant="danger d-flex align-items-center"
-                onClick={() => {
-                  cleanShoppingCart();
-                  navigate("/products");
-                }}
+                onClick={cleanShoppingCart}
               >
                 <span className="material-symbols-outlined">
                   shopping_cart_off

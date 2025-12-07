@@ -10,13 +10,13 @@ import { AuthProvider } from "./context/auth/AuthProvider";
 import { ShoppingCartProvider } from "./context/shoppingCart/ShoppingCartProvider";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <BrowserRouter basename="/e-commerce-talento-tech">
-      <ShoppingCartProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </ShoppingCartProvider>
-    </BrowserRouter>
-  </StrictMode>
+  // <StrictMode>
+  <BrowserRouter basename="/e-commerce-talento-tech">
+    <ShoppingCartProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </ShoppingCartProvider>
+  </BrowserRouter>
+  // </StrictMode>
 );
