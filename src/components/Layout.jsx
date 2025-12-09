@@ -1,9 +1,12 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
 import { NavBar } from "./NavBar";
 import { Footer } from "./Footer";
+import { useAuth } from "../context/auth/AuthContext";
 
 function Layout() {
+  const { isAdmin } = useAuth();
+
   return (
     <>
       <header style={{ height: "55px" }}>
@@ -11,7 +14,7 @@ function Layout() {
       </header>
       <main
         style={{
-          height: "90vh",
+          height: isAdmin ? "94vh" : "90vh",
           overflowY: "auto",
           paddingTop: "3rem",
           paddingBottom: "3rem",
@@ -19,9 +22,11 @@ function Layout() {
       >
         <Outlet />
       </main>
-      <footer>
-        <Footer />
-      </footer>
+      {!isAdmin && (
+        <footer>
+          <Footer />
+        </footer>
+      )}
     </>
   );
 }

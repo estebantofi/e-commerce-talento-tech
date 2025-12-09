@@ -1,8 +1,18 @@
 import { useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
+import { decodeToken } from "react-jwt";
 
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(!!localStorage.getItem("token"));
+  const [isAdmin, setIsAdmin] = useState(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const { role } = decodeToken(token);
+      return role === "admin";
+    }
+
+    return false;
+  });
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -22,16 +32,22 @@ export const AuthProvider = ({ children }) => {
 
   const authControl = (token) => {
     localStorage.setItem("token", token);
+
+    const { role } = decodeToken(token);
+
+    setIsAdmin(role === "admin");
     setAuth(true);
   };
 
   const clearToken = () => {
     localStorage.removeItem("token");
+
+    setIsAdmin(false);
     setAuth(false);
   };
 
   return (
-    <AuthContext.Provider value={{ auth, authControl, clearToken }}>
+    <AuthContext.Provider value={{ auth, authControl, clearToken, isAdmin }}>
       {children}
     </AuthContext.Provider>
   );

@@ -13,7 +13,7 @@ export const NavBar = () => {
 
   const { getCountProducts, setProducts, setCartId, cartId } =
     useShoppingCart();
-  const { auth, clearToken } = useAuth();
+  const { auth, clearToken, isAdmin } = useAuth();
 
   const navigate = useNavigate();
 
@@ -22,7 +22,8 @@ export const NavBar = () => {
   if (auth) {
     const token = localStorage.getItem("token");
 
-    if (token) {
+    if (!isAdmin) {
+      // Just to regular user
       const { sub: userId, user } = decodeToken(token);
       userName = { user };
 
@@ -72,6 +73,10 @@ export const NavBar = () => {
               });
           });
       }
+    } else {
+      // Just to admin user
+      const { user } = decodeToken(token);
+      userName = { user };
     }
   }
 
@@ -92,37 +97,45 @@ export const NavBar = () => {
 
   return (
     <Navbar bg="dark" data-bs-theme="dark" fixed="top" className="px-3">
-      <Link className="navbar-brand d-flex align-items-center" to={"/products"}>
+      <Link
+        className="navbar-brand d-flex align-items-center"
+        to={isAdmin ? "/dashboard/products" : "/products"}
+      >
         <span className="material-symbols-outlined">home</span> Navbar
       </Link>
       <Nav className="me-auto">
-        <Link className="nav-link" to={"/products"}>
+        <Link
+          className="nav-link"
+          to={isAdmin ? "/dashboard/products" : "/products"}
+        >
           Products
         </Link>
       </Nav>
       {userName?.user && (
         <Nav className="me-2">
-          <p className="m-0 text-light fs-4">Hola, {userName.user}</p>
+          <p className="m-0 text-light fs-4">Hi, {userName.user}</p>
+        </Nav>
+      )}
+      {!isAdmin && (
+        <Nav>
+          <Button
+            variant="primary d-flex align-items-center"
+            onClick={handleShow}
+          >
+            <span className="material-symbols-outlined">shopping_cart</span>
+            <Badge bg="secondary">{getCountProducts()}</Badge>
+          </Button>
+          <OffCanvas
+            show={show}
+            handleClose={handleClose}
+            placement={"end"}
+            setShow={setShow}
+          />
         </Nav>
       )}
       <Nav>
         <Button
-          variant="primary d-flex align-items-center"
-          onClick={handleShow}
-        >
-          <span className="material-symbols-outlined">shopping_cart</span>
-          <Badge bg="secondary">{getCountProducts()}</Badge>
-        </Button>
-        <OffCanvas
-          show={show}
-          handleClose={handleClose}
-          placement={"end"}
-          setShow={setShow}
-        />
-      </Nav>
-      <Nav>
-        <Button
-          variant="dark d-flex align-items-center"
+          variant="dark d-flex align-items-center ms-1"
           onClick={auth ? handleLogout : handleLogin}
           title={auth ? "logout" : "login"}
         >

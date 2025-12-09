@@ -4,27 +4,40 @@ import { Card } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-export function FormLogin({ authControl, navigate }) {
+import { emulateJWT } from "./emulateJWT";
+
+export function FormLogin({ authControl, navigate, isDashboardRoute }) {
   const [form, setForm] = useState({ username: "", password: "" });
   const [error, setError] = useState([]);
 
   const loginSubmit = async () => {
     const { username, password } = form;
 
-    try {
-      const resp = await axios.post("https://fakestoreapi.com/auth/login", {
-        username,
-        password,
-      });
+    if (isDashboardRoute) {
+      const loginAdmin = async () => {
+        const jwt = emulateJWT();
 
-      authControl(resp.data.token);
-      navigate("/");
-    } catch (error) {
-      setError([error.response.data]);
+        authControl(jwt);
+        navigate("/dashboard/products");
+      };
 
-      setTimeout(() => {
-        setError([]);
-      }, 5000);
+      loginAdmin();
+    } else {
+      try {
+        const resp = await axios.post("https://fakestoreapi.com/auth/login", {
+          username,
+          password,
+        });
+
+        authControl(resp.data.token);
+        navigate("/products");
+      } catch (error) {
+        setError([error.response.data]);
+
+        setTimeout(() => {
+          setError([]);
+        }, 5000);
+      }
     }
   };
 

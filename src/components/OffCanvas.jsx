@@ -27,7 +27,7 @@ function OffCanvas({ show, handleClose, placement }) {
               className="col-auto"
               variant="primary d-flex align-items-center"
               onClick={() => {
-                navigate("/");
+                navigate("/products");
                 handleClose();
               }}
             >
