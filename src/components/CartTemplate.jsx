@@ -89,7 +89,7 @@ export function CartTemplate({
         </Button>
       </div>
       <img
-        src={form.image}
+        src={form.image || image}
         alt="Preview"
         className="m-auto border-bottom"
         style={{ width: "260px", height: "280px" }}

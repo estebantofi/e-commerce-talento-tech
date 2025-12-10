@@ -66,7 +66,14 @@ export default function Product() {
     <div style={{ width: "80vw", margin: "auto" }}>
       <div className="d-flex">
         <div className="d-flex align-items-center flex-column">
-          <img src={product.image} alt={product.title} className="img-fluid" />
+          <img
+            src={
+              product.image ||
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyNfRFSIbyb40oYPjza5OgYytSKB5U0019ZQ&s"
+            }
+            alt={product.title}
+            className="img-fluid"
+          />
           <div className="d-flex align-item-center">
             <Button
               variant="danger d-flex align-items-center"
@@ -95,11 +102,8 @@ export default function Product() {
         <div className="d-flex flex-column justify-content-center ms-3">
           <h1>{product.title}</h1>
           <hr />
-          <div className="mb-5 d-flex justify-content-between">
-            <p>
-              <strong className="me-5">{product.category}</strong>
-            </p>
-            <p>{`$${product.price}`}</p>
+          <div className="mb-5 d-flex">
+            <p className="ms-auto fs-3">{`Price: $${product.price}`}</p>
           </div>
           <p>{product.description}</p>
         </div>
