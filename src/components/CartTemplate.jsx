@@ -6,12 +6,13 @@ import Form from "react-bootstrap/Form";
 import "./CartTemplate.css";
 
 export function CartTemplate({
-  title,
-  description,
+  title = "",
+  description = "",
   image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyNfRFSIbyb40oYPjza5OgYytSKB5U0019ZQ&s",
-  price,
+  price = 0,
   id,
   setEdit,
+  saveProduct,
 }) {
   const [form, setForm] = useState({
     title,
@@ -36,15 +37,19 @@ export function CartTemplate({
     });
   };
 
-  const submitEdit = () => {
+  const submitEdit = async () => {
     const requestForm = {
       ...form,
       price: isNaN(parseFloat(form.price)) ? 0 : parseFloat(form.price),
     };
 
     setForm(requestForm);
-    console.log(requestForm);
-    setEdit(false);
+
+    const saved = await saveProduct(requestForm);
+
+    if (saved) {
+      setEdit(false);
+    }
   };
 
   const clean = () => {

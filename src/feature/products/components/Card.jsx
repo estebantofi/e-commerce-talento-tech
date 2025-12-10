@@ -4,7 +4,16 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { CartTemplate } from "../../../components/CartTemplate";
 
-function Card({ title, description, image, id, price, isAdmin }) {
+function Card({
+  title,
+  description,
+  image,
+  id,
+  price,
+  isAdmin,
+  deleteProduct,
+  saveProduct,
+}) {
   const [edit, setEdit] = useState(false);
 
   const navigate = useNavigate();
@@ -17,6 +26,7 @@ function Card({ title, description, image, id, price, isAdmin }) {
       id={id}
       price={price}
       setEdit={setEdit}
+      saveProduct={saveProduct}
     />
   ) : (
     <CardBS
@@ -32,7 +42,9 @@ function Card({ title, description, image, id, price, isAdmin }) {
           <Button
             className="col-2 ms-auto"
             variant="danger d-flex align-items-center justify-content-center"
-            onClick={() => setEdit(true)}
+            onClick={() => {
+              deleteProduct(id);
+            }}
           >
             <span className="material-symbols-outlined">delete</span>
           </Button>

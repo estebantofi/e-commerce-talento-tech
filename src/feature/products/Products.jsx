@@ -36,6 +36,79 @@ function Products() {
     );
   }
 
+  const deleteProduct = async (id) => {
+    try {
+      const resp = await axios.delete(
+        `https://691cfd93d58e64bf0d34a237.mockapi.io/products/${id}`
+      );
+
+      if (resp) {
+        const filterProducts = products.filter((product) => product.id !== id);
+
+        setProducts(filterProducts);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const saveProduct = async (productData) => {
+    const BASE_URL = "https://691cfd93d58e64bf0d34a237.mockapi.io/products";
+
+    const isEditing = !!productData.id;
+
+    let apiUrl = BASE_URL;
+    let httpMethod = "";
+
+    if (isEditing) {
+      apiUrl = `${BASE_URL}/${productData.id}`;
+      httpMethod = "PUT";
+    } else {
+      httpMethod = "POST";
+    }
+
+    try {
+      const resp = await axios({
+        method: httpMethod,
+        url: apiUrl,
+        data: productData,
+      });
+
+      if (resp) {
+        if (isEditing) {
+          const index = products.findIndex(
+            (product) => product.id === productData.id
+          );
+
+          if (index === -1) return;
+
+          const productsCopia = [...products];
+
+          const objetoActualizado = {
+            ...productsCopia[index],
+            ...productData,
+          };
+
+          productsCopia[index] = objetoActualizado;
+
+          setProducts(productsCopia);
+        } else {
+          const { data } = resp;
+
+          setProducts([...products, data]);
+        }
+        return true;
+      }
+    } catch (error) {
+      console.error(
+        `Error al ${isEditing ? "editar" : "crear"} el producto:`,
+        error
+      );
+
+      return false;
+    }
+  };
+
   return (
     <>
       {isAdmin && (
@@ -45,7 +118,7 @@ function Products() {
             title={"New Product"}
             body={
               <div className="d-flex justify-content-center">
-                <CartTemplate setEdit={setIsShow} />
+                <CartTemplate saveProduct={saveProduct} setEdit={setIsShow} />
               </div>
             }
           />
@@ -64,16 +137,21 @@ function Products() {
           </div>
         </>
       )}
-      <Container className="row mx-auto justify-content-between">
+      <Container className="row mx-auto gap-3 justify-content-start">
         {products.map(({ description, image, title, id, price }) => (
           <Card
             isAdmin={isAdmin}
             description={description}
-            image={image}
+            image={
+              image?.trim() ||
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyNfRFSIbyb40oYPjza5OgYytSKB5U0019ZQ&s"
+            }
             title={title}
             price={price}
             key={id}
             id={id}
+            deleteProduct={deleteProduct}
+            saveProduct={saveProduct}
           />
         ))}
       </Container>
